@@ -40,22 +40,22 @@ void hash_functions_benchmark::export_csv_to(std::ostream &os) {
 }
 
 void hash_functions_benchmark::test_on_data_len(std::size_t data_len, std::size_t tests) {
-    std::vector<double> new_row;
-    new_row.reserve(hash_algorithms_.size());
-    for (auto &hash_function : hash_algorithms_) {
-        std::uint64_t total_evaluation_ticks = 0;
-        for (std::size_t test_i = 0; test_i < tests; ++test_i) {
-            std::vector<std::uint8_t> random_data(data_len);
-            std::generate(random_data.begin(), random_data.end(), [this]() { return rand_(); });
+    std::vector<double> test_results(hash_algorithms_.size());
+    for (std::size_t test_i = 0; test_i < tests; ++test_i) {
+        std::vector<std::uint8_t> random_data(data_len);
+        std::generate(random_data.begin(), random_data.end(), [this]() { return rand_(); });
+        for (std::size_t hf_i = 0; hf_i < hash_algorithms_.size(); ++hf_i) {
+            auto &hash_algorithm = hash_algorithms_[hf_i];
             std::int32_t output = 0;
-            total_evaluation_ticks += static_cast<std::uint64_t>(
-                get_evaluation_ticks(hash_function.second,
+            double ticks = static_cast<double>(
+                get_evaluation_ticks(hash_algorithm.second,
                                      random_data.data(),
                                      data_len,
                                      rand_(),
                                      &output));
+            test_results[hf_i] += ticks;
         }
-        new_row.push_back(static_cast<double>(total_evaluation_ticks) / static_cast<double>(tests));
     }
-    rows_.push_back(std::move(new_row));
+    std::for_each(test_results.begin(), test_results.end(), [tests](auto &res) { res /= tests; });
+    rows_.push_back(std::move(test_results));
 }
