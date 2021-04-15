@@ -8,7 +8,8 @@ add_executable(
         src/main.cpp
         extern/smhasher/src/MurmurHash3.cpp
         src/hash_functions_benchmark.cpp
-)
+        src/hash_algorithms.cpp)
+target_compile_options(${EXE} PRIVATE -Wall -Wextra -pedantic)
 target_include_directories(${EXE} PUBLIC include)
 target_link_libraries(${EXE} stdc++)
 target_link_libraries(${EXE} m)
