@@ -1,3 +1,3 @@
-# data-storage-systems
+Data Storage Systems course homeworks
 
-Data Storage Systems course homeworks. Each one is completed in separate branch.
+Each one is completed in separate branch.
