@@ -17,6 +17,14 @@ target_link_libraries(${EXE} m)
 # Add lz4
 target_include_directories(${EXE} PUBLIC extern/lz4/lib)
 
+# Add zstd
+add_subdirectory(extern/zstd/build/cmake/)
+option(ZSTD_BUILD_PROGRAMS "BUILD PROGRAMS" OFF)
+option(ZSTD_BUILD_TESTS "BUILD TESTS" OFF)
+option(ZSTD_LEGACY_SUPPORT "LEGACY SUPPORT" OFF)
+target_include_directories(${EXE} PUBLIC extern/zstd/lib/)
+target_link_libraries(${EXE} libzstd_shared)
+
 # # Add MurmurHash3
 # target_include_directories(${EXE} PUBLIC extern/smhasher/src)
 
