@@ -14,7 +14,8 @@ namespace compression_bench {
 class compression_algorithm_benchmark {
    public:
     explicit compression_algorithm_benchmark(const std::vector<std::string> &input_filenames,
-                                             const std::vector<std::shared_ptr<compression_algorithm>> &algorithms);
+                                             const std::vector<std::shared_ptr<compression_algorithm>> &algorithms,
+                                             std::size_t benchmark_runs);
 
     template <typename ExecutorT>
     void export_to_csv(const std::string &filename, ExecutorT executor) {

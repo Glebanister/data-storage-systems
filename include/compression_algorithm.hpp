@@ -31,16 +31,22 @@ class compression_algorithm {
 
     virtual ~compression_algorithm() = default;
 
-    const std::string &get_name() const noexcept;
+    [[nodiscard]] const std::string &get_name() const noexcept;
 
    private:
     const std::string name_;
 };
 
 struct compression_stats {
-    double ratio;
-    std::uint64_t ticks;
+    double total_ratio = 0.0;
+    std::uint64_t total_ticks = 0;
+    std::size_t runs = 0;
+
+    [[nodiscard]] double get_ratio() const noexcept;
+    [[nodiscard]] std::uint64_t get_ticks() const noexcept;
 };
+
+compression_stats &operator+=(compression_stats &, const compression_stats &);
 
 void assert_algorithm_is_correct(compression_algorithm &,
                                  const std::uint8_t *data,

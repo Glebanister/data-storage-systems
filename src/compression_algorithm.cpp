@@ -63,6 +63,22 @@ compression_stats test_compression_algorithm(compression_algorithm &algorithm,
 
     return compression_stats{
         static_cast<double>(length) / static_cast<double>(output_length),
-        end_ticks - start_ticks};
+        end_ticks - start_ticks,
+        1};
+}
+
+compression_stats &operator+=(compression_stats &a, const compression_stats &b) {
+    a.total_ratio += b.total_ratio;
+    a.total_ticks += b.total_ticks;
+    a.runs += b.runs;
+    return a;
+}
+
+double compression_stats::get_ratio() const noexcept {
+    return total_ratio / static_cast<double>(runs);
+}
+
+std::uint64_t compression_stats::get_ticks() const noexcept {
+    return static_cast<std::uint64_t>(static_cast<double>(total_ticks) / static_cast<double>(runs));
 }
 }  // namespace compression_bench

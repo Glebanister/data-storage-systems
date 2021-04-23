@@ -33,10 +33,11 @@ int main() {
                 lz4,
                 zstd1,
                 zstd7,
-            });
+            },
+            20);
 
-        benchmark.export_to_csv("speed.csv", [](compression_stats stats) { return stats.ticks; });
-        benchmark.export_to_csv("compression.csv", [](compression_stats stats) { return stats.ratio; });
+        benchmark.export_to_csv("speed.csv", [](compression_stats stats) { return stats.get_ticks(); });
+        benchmark.export_to_csv("compression.csv", [](compression_stats stats) { return stats.get_ratio(); });
 
     } catch (const std::exception &ex) {
         std::cerr << "Exception: " << ex.what() << std::endl;
