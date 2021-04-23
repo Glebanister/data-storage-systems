@@ -9,6 +9,8 @@ add_executable(
         src/lz4_wrapper.cpp
         src/zstd_wrapper.cpp
         src/compression_algorithm.cpp
+        src/compression_algorithm_benchmark.cpp
+        src/compression_algorithm_test.cpp
         
         extern/lz4/lib/lz4.c)
     

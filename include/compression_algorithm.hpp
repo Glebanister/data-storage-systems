@@ -47,7 +47,8 @@ void assert_algorithm_is_correct(compression_algorithm &,
                                  std::size_t length,
                                  std::size_t max_output_length);
 
-compression_stats test_algorithm(compression_algorithm &,
-                                 const std::uint8_t *data,
-                                 std::size_t length);
+compression_stats test_compression_algorithm(compression_algorithm &,
+                                             const std::uint8_t *data,
+                                             std::size_t length,
+                                             std::size_t max_output_length);
 }  // namespace compression_bench

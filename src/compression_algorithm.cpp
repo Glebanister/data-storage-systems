@@ -1,8 +1,10 @@
+#include "compression_algorithm.hpp"
+
 #include <algorithm>
 #include <cstring>
 #include <memory>
 
-#include "compression_algorithm.hpp"
+#include "utility.hpp"
 
 namespace compression_bench {
 compression_exception::compression_exception(std::string message)
@@ -40,17 +42,27 @@ void assert_algorithm_is_correct(compression_algorithm &algorithm,
                                                          output_length);
     if (length != decompressed_size) {
         throw compression_exception(std::string{"Error while checking '"} +
-                                    algorithm.get_name().c_str() +
-                                    "': Invalid decomressed data length");
+                                    algorithm.get_name() +
+                                    "': Invalid decompressed data length");
     }
     if (std::memcmp(decompressed.get(), data, length) != 0) {
         throw compression_exception(std::string{"Error while checking '"} +
-                                    algorithm.get_name().c_str() +
+                                    algorithm.get_name() +
                                     "': Invalid compression result");
     }
 }
 
-// compression_stats test_algorithm(compression_algorithm &,
-//                                  const std::uint8_t *data,
-//                                  std::size_t length) {}
+compression_stats test_compression_algorithm(compression_algorithm &algorithm,
+                                             const std::uint8_t *data,
+                                             std::size_t length,
+                                             std::size_t max_output_length) {
+    std::unique_ptr<std::uint8_t[]> output_memory = std::make_unique<std::uint8_t[]>(max_output_length);
+    std::uint64_t start_ticks = utility::get_cycles();
+    std::size_t output_length = algorithm.compress(data, length, output_memory.get(), max_output_length);
+    std::uint64_t end_ticks = utility::get_cycles();
+
+    return compression_stats{
+        static_cast<double>(length) / static_cast<double>(output_length),
+        end_ticks - start_ticks};
+}
 }  // namespace compression_bench

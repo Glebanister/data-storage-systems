@@ -11,7 +11,7 @@ std::size_t check_zstd_no_error(const std::string &algo_name, std::size_t code) 
 }
 
 zstd_wrapper::zstd_wrapper(const std::size_t compression_level)
-    : compression_algorithm(std::string{"zstd "} + std::to_string(compression_level)),
+    : compression_algorithm(std::string{"zstd (lvl "} + std::to_string(compression_level) + ")"),
       compression_level_(compression_level) {}
 
 std::size_t zstd_wrapper::compress(const std::uint8_t *src,

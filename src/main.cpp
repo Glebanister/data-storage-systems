@@ -1,18 +1,50 @@
 #include <iostream>
 #include <memory>
 
+#include "compression_algorithm_benchmark.hpp"
+#include "compression_algorithm_test.hpp"
 #include "lz4_wrapper.hpp"
 #include "zstd_wrapper.hpp"
 
 int main() {
-    using namespace compression_bench;
+    try {
+        using namespace compression_bench;
 
-    unsigned char string[] = "Hello";
-    lz4_wrapper lz4{};
-    zstd_wrapper zstd1{1};
-    zstd_wrapper zstd7{7};
+        auto lz4 = std::make_shared<lz4_wrapper>();
+        auto zstd1 = std::make_shared<zstd_wrapper>(1);
+        auto zstd7 = std::make_shared<zstd_wrapper>(7);
 
-    assert_algorithm_is_correct(lz4, string, sizeof(string), 100);
-    assert_algorithm_is_correct(zstd1, string, sizeof(string), 100);
-    assert_algorithm_is_correct(zstd7, string, sizeof(string), 100);
+        compression_algorithm_test(
+            {
+                lz4,
+                zstd1,
+                zstd7,
+            },
+            100,
+            50,
+            500);
+
+        auto benchmark = compression_algorithm_benchmark(
+            {
+                "sample_data.txt",
+                "sample_data_2.txt",
+            },
+            {
+                lz4,
+                zstd1,
+                zstd7,
+            });
+
+        benchmark.export_to_csv("speed.csv", [](compression_stats stats) { return stats.ticks; });
+        benchmark.export_to_csv("compression.csv", [](compression_stats stats) { return stats.ratio; });
+
+    } catch (const std::exception &ex) {
+        std::cerr << "Exception: " << ex.what() << std::endl;
+        return 1;
+    } catch (...) {
+        std::cerr << "Unknown error has occurred" << std::endl;
+        return 1;
+    }
+
+    return 0;
 }
