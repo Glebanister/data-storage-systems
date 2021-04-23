@@ -2,10 +2,13 @@ cmake_minimum_required(VERSION 3.12)
 project(compression-bench)
 
 set(CMAKE_CXX_STANDARD 17)
-set(EXE compresJsion-bench)
+set(EXE compression-bench)
 add_executable(
         ${EXE}
         src/main.cpp
+        src/lz4_wrapper.cpp
+        src/zstd_wrapper.cpp
+        src/compression_algorithm.cpp
         
         extern/lz4/lib/lz4.c)
     

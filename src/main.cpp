@@ -1,11 +1,18 @@
 #include <iostream>
 #include <memory>
 
-#include "lz4.h"
-#include "zstd.h"
+#include "lz4_wrapper.hpp"
+#include "zstd_wrapper.hpp"
 
 int main() {
-    char string[] = "Hello";
-    std::unique_ptr<char []> output = std::make_unique<char []>(10);
-    LZ4_compress_default(string, output.get(), sizeof(string), 10);
+    using namespace compression_bench;
+
+    unsigned char string[] = "Hello";
+    lz4_wrapper lz4{};
+    zstd_wrapper zstd1{1};
+    zstd_wrapper zstd7{7};
+
+    assert_algorithm_is_correct(lz4, string, sizeof(string), 100);
+    assert_algorithm_is_correct(zstd1, string, sizeof(string), 100);
+    assert_algorithm_is_correct(zstd7, string, sizeof(string), 100);
 }
