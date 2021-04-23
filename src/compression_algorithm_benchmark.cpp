@@ -12,13 +12,14 @@ compression_algorithm_benchmark::compression_algorithm_benchmark(
     for (std::size_t run_i = 0; run_i < benchmark_runs; ++run_i) {
         std::size_t input_file_i = 0;
         for (const std::string &input_filename : input_filenames) {
-            std::ifstream stream(input_filename, std::ios::in | std::ios::binary);
-            std::vector<std::uint8_t> contents((std::istreambuf_iterator<char>(stream)), std::istreambuf_iterator<char>());
+            std::ifstream input_file(input_filename);
+            std::string contents((std::istreambuf_iterator<char>(input_file)),
+                                 std::istreambuf_iterator<char>());
             std::size_t algorithm_i = 0;
             for (const auto &algorithm : algorithms) {
                 stats_[input_file_i][algorithm_i] +=
                     test_compression_algorithm(*algorithm,
-                                               contents.data(),
+                                               reinterpret_cast<const std::uint8_t *>(contents.data()),
                                                contents.size(),
                                                std::max(200, static_cast<int>((contents.size() * 3 / 2))));
                 ++algorithm_i;

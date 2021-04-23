@@ -21,7 +21,7 @@ class compression_algorithm_benchmark {
     void export_to_csv(const std::string &filename, ExecutorT executor) {
         std::ofstream output_file(filename);
         output_file << std::fixed << std::setprecision(4);
-        if (!output_file.good()) {
+        if (!output_file) {
             throw compression_exception("Unable to write to file '" + filename + "'");
         }
         output_file << "filename";

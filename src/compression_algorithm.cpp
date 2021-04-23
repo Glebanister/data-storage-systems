@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include <cstring>
+#include <iostream>
 #include <memory>
 
 #include "utility.hpp"
@@ -79,6 +80,6 @@ double compression_stats::get_ratio() const noexcept {
 }
 
 std::uint64_t compression_stats::get_ticks() const noexcept {
-    return static_cast<std::uint64_t>(static_cast<double>(total_ticks) / static_cast<double>(runs));
+    return total_ticks / runs;
 }
 }  // namespace compression_bench

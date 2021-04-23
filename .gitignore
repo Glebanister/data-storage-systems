@@ -1,2 +1,7 @@
 build/
 .vscode/
+cmake-build-release/
+cmake-build-debug/
+.idea/
+speed.csv
+compression.csv
